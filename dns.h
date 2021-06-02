@@ -1,5 +1,7 @@
 #ifndef dnsH
 #define dnsH
+#include <stdlib.h>
+#include <string.h>
 enum { QR, OPCODE, AA, TC, RD, RA, Z, RCODE };
 
 enum {
@@ -46,12 +48,20 @@ typedef struct DNSRR {
 } DNSrr;
 #pragma pack(pop)
 
+extern unsigned int PORT;
+extern char Host[16];
+extern char PUBLIC_DNS_IP[16];
+
 unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
-                      char *queryqname, char *Response);
+                      char *queryqname, char *Response, unsigned int qip);
 unsigned short solveAAAA(char *queryqname, char *Response);
 unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
-                           char *queryname, char *Response);
+                           char *queryname, char *Response, unsigned int qip);
 
-unsigned short getResforReq(char *Query, char *Response);
+unsigned short getResforReq(char *Query, char *Response, unsigned int qip,
+                            unsigned int len);
+unsigned short queryForRemote(DNSHeader *Header, DNSQuestion *Question,
+                              char *servername, int servernamelen,
+                              char *Response);
 
 #endif

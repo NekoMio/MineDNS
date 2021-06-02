@@ -1,6 +1,9 @@
 #include "tools.h"
 #include <string.h>
 
+int DD = 1;
+FILE *logfile = NULL;
+
 unsigned short unPackFlags(unsigned short flags, int type) {
   switch (type) {
     case QR:
@@ -22,31 +25,31 @@ unsigned short unPackFlags(unsigned short flags, int type) {
   }
 }
 
-void SetFlags(unsigned short flags, int type, unsigned char val) {
+unsigned short SetFlags(unsigned short flags, int type, unsigned char val) {
   switch (type) {
     case QR:
-      flags = (flags & QR_MASK) | (val << 15);
+      return ((flags & QR_MASK) | (val << 15));
     case OPCODE:
-      flags = (flags & OPCODE_MASK) | (val << 11);
+      return ((flags & OPCODE_MASK) | (val << 11));
     case AA:
-      flags = (flags & AA_MASK) | (val << 10);
+      return ((flags & AA_MASK) | (val << 10));
     case TC:
-      flags = (flags & TC_MASK) | (val << 9);
+      return ((flags & TC_MASK) | (val << 9));
     case RD:
-      flags = (flags & RD_MASK) | (val << 8);
+      return ((flags & RD_MASK) | (val << 8));
     case RA:
-      flags = (flags & RA_MASK) | (val << 7);
+      return ((flags & RA_MASK) | (val << 7));
     case Z:
-      flags = (flags & Z_MASK) | (val << 4);
+      return ((flags & Z_MASK) | (val << 4));
     case RCODE:
-      flags = (flags & RCODE_MASK) | (val);
+      return ((flags & RCODE_MASK) | (val));
   }
 }
 
 // split header from query
 unsigned short decodeHeader(char *Query, DNSHeader *queryheader) {
-  memcpy(queryheader, Query, sizeof(queryheader));
-  return sizeof(queryheader);
+  memcpy(queryheader, Query, sizeof(DNSHeader));
+  return sizeof(DNSHeader);
 }
 
 char *encodeName(char *name) {
@@ -83,14 +86,14 @@ char *decodeQuestion(char *Query, DNSQuestion *queryquestion) {
     if (c == 0) {
       domain[i] = 0;
       break;
-    } else if (c <= 63) {
+    } else if (c < 45) {
       domain[i] = '.';
     } else {
-      domain[i - 1] = c;
+      domain[i] = c;
     }
   }
   memcpy(queryquestion, Query, sizeof(queryquestion));
-  return strdup(domain);
+  return strdup(domain + 1);
 }
 
 unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
@@ -107,21 +110,65 @@ unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
   Response += RRlen;
   if (Response - Begin > 512) {
     Response = Begin + 512;
-    SetFlags(Header->flags, TC, 1);
+    Header->flags = SetFlags(Header->flags, TC, 1);
     memcpy(Begin, Header, sizeof(DNSHeader));
     return 512;
   }
   return Response - Begin;
 }
 
+void push(int x) {
+  IDMapQueue[IDMapQueueRight] = x;
+  IDMapQueueRight++;
+  if (IDMapQueueRight == 65537) IDMapQueueRight = 0;
+}
+int pop() {
+  if (IDMapQueueRight == IDMapQueueLeft) return - 1;
+  else return IDMapQueue[IDMapQueueLeft++];
+}
 unsigned char findInStatic(char *name, unsigned int *x) {
-
+  return 0;
 }
 
 unsigned short createMap(unsigned short x, int ip) {
-
+  unsigned short id = pop();
+  IDMapData[id] = (IDMap){ip, x};
+  return id;
 }
 
 unsigned short deleteMap(unsigned short x, int *ip) {
+  push(x);
+  *ip = IDMapData[x].ip;
+  return IDMapData[x].ID;
+}
 
+void LOG(int type, ...) {
+  // printf ("%d\n", type);
+  va_list args;
+  va_start (args, type);
+  char *format = va_arg(args, char*);
+  if ((type & NORMALMSG)) {
+    vprintf (format, args);
+    return;
+  }
+  if ((type & WARNINGMSG)) {
+    printf ("WARNING: ");
+    vprintf (format, args);
+    return;
+  }
+  if ((type & ERRORMSG)) {
+    printf ("ERROR: ");
+    vprintf (format, args);
+    return;
+  }
+  if ((type & DEBUGMSG) && DD) {
+    printf ("DEBUG: ");
+    printf (format, args);
+    return;
+  }
+  if ((type & LOGMSG) && logfile) {
+    vfprintf(logfile, format, args);
+    return;
+  }
+  va_end(args);
 }
