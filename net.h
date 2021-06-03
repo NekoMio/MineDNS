@@ -23,6 +23,7 @@ struct sockaddr_in serverAddr;
 extern unsigned int PORT;
 extern char Host[16];
 extern char PUBLIC_DNS_IP[16];
+extern int DD;
 
 enum {
     SERVER = 1,
@@ -30,8 +31,8 @@ enum {
 };
 
 void init_socket();
-char *recvMessage(unsigned int *ip, int *len);
-void sendMessage(char *Msg, int len, unsigned int remote);
+char *recvMessage(unsigned int *ip, int *len, unsigned short *port);
+void sendMessage(char *Msg, int len, unsigned int remote, unsigned short port);
 
 
 #endif

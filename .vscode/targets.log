@@ -1,0 +1,326 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+mingw32-make: *** No rule to make target 'all'.  Stop.
+ 
+# GNU Make 4.3
+# Built for Windows32
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Thu Jun 03 17:01:45 2021
+
+# Variables
+
+# environment
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
+SYSTEMDRIVE = C:
+# environment
+JAVA_HOME = E:\scoop\apps\liberica16-jre\current
+# environment
+LC_ALL = C
+# environment
+USERPROFILE = C:\Users\wildr
+# environment
+LOCALAPPDATA = C:\Users\wildr\AppData\Local
+# environment
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-935f8d85-9763-4e38-821e-31aead2ada6f-sock
+# environment
+VSCODE_CWD = C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code
+# environment
+SYSTEMROOT = C:\windows
+# environment
+PROCESSOR_LEVEL = 6
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\windows\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := E:/scoop/apps/gcc/current/bin/mingw32-make.exe
+# automatic
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16388_KTTZBCAKMXXRFLLU
+# environment
+ONEDRIVECOMMERCIAL = C:\Users\wildr\OneDrive - bupt.edu.cn
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# automatic
+%D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
+# automatic
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+LANG = C
+# default
+.LOADED := 
+# environment
+TMP = C:\Users\wildr\AppData\Local\Temp
+# default
+.INCLUDE_DIRS = .
+# makefile
+MAKEFLAGS = pqrR
+# environment
+ONEDRIVE = C:\Users\wildr\OneDrive - bupt.edu.cn
+# environment
+POWERSHELL_DISTRIBUTION_CHANNEL = MSI:Windows 10 Pro
+# makefile
+CURDIR := c:/Users/wildr/Desktop/minidns
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
+*D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
+# environment
+PROGRAMFILES = C:\Program Files
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# automatic
++D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 16388
+# automatic
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# automatic
+*F = $(notdir $*)
+# automatic
+<D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
+# environment
+PROSTITCHERPATH = C:\Program Files (x86)\Insta360Stitcher\tools\proStitcher
+# environment
+SCOOP = E:\scoop
+# environment
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"71ffa7264d3a9c91d6413c59d18c2924.zh-cn","_translationsConfigFile":"C:\\Users\\wildr\\AppData\\Roaming\\Code\\clp\\71ffa7264d3a9c91d6413c59d18c2924.zh-cn\\tcf.json","_cacheRoot":"C:\\Users\\wildr\\AppData\\Roaming\\Code\\clp\\71ffa7264d3a9c91d6413c59d18c2924.zh-cn","_resolvedLanguagePackCoreLocation":"C:\\Users\\wildr\\AppData\\Roaming\\Code\\clp\\71ffa7264d3a9c91d6413c59d18c2924.zh-cn\\054a9295330880ed74ceaedda236253b4f39a335","_corruptedFile":"C:\\Users\\wildr\\AppData\\Roaming\\Code\\clp\\71ffa7264d3a9c91d6413c59d18c2924.zh-cn\\corrupted.info","_languagePackSupport":true}
+# environment
+ONEDRIVECONSUMER = C:\Users\wildr\OneDrive
+# default
+MAKE_HOST := Windows32
+# environment
+PROGRAMDATA = C:\ProgramData
+# default
+SHELL := E:/scoop/shims/sh.exe
+# environment
+HOMEPATH = \Users\wildr
+# default
+MAKECMDGOALS := all
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+COMSPEC = C:\windows\system32\cmd.exe
+# environment
+FR_CUSTOMDATA_PATH = D:\SteamLibrary\steamapps\common\FaceRig\Mod\VP\PC_CustomData\
+# environment
+WINDIR = C:\windows
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\PowerShell\7\;C:\Program Files\Git\cmd;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\dotnet\;C:\Program Files (x86)\Insta360Stitcher\tools\proStitcher;E:\scoop\apps\liberica16-jre\current\bin;E:\scoop\apps\python\current\Scripts;E:\scoop\apps\python\current;E:\scoop\apps\oraclejre8\current\bin;E:\scoop\apps\nodejs\current\bin;E:\scoop\apps\nodejs\current;C:\Users\wildr\go\bin;E:\scoop\apps\gcc\current\bin;E:\scoop\apps\yarn\current\global\node_modules\.bin;E:\scoop\apps\yarn\current\Yarn\bin;C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code\bin;E:\scoop\shims;C:\Program Files\Bandizip\;C:\Program Files (x86)\Insta360Stitcher\tools\proStitcher
+# environment
+ZES_ENABLE_SYSMAN = 1
+# environment
+COMPUTERNAME = DESKTOP-CH7JS3I
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+PROMPT = $P$G
+# environment
+GOROOT = E:\scoop\apps\go\current
+# environment
+LOGONSERVER = \\DESKTOP-CH7JS3I
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = wildr
+# environment
+COMMONPROGRAMFILES = C:\Program Files\Common Files
+# automatic
+?F = $(notdir $?)
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# automatic
++F = $(notdir $+)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERDOMAIN = DESKTOP-CH7JS3I
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+OS = Windows_NT
+# makefile
+.DEFAULT_GOAL := dns
+# default
+MAKE_VERSION := 4.3
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# environment
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-CH7JS3I
+# environment
+NUMBER_OF_PROCESSORS = 8
+# environment
+PUBLIC = C:\Users\Public
+# environment
+ASL.LOG = Destination=file
+# environment
+VSCODE_NODE_CACHED_DATA_DIR = C:\Users\wildr\AppData\Roaming\Code\CachedData\054a9295330880ed74ceaedda236253b4f39a335
+# environment
+APPDATA = C:\Users\wildr\AppData\Roaming
+# makefile (from 'Makefile', line 2)
+CFLAGS = 
+# environment
+HOMEDRIVE = C:
+# environment
+PROCESSOR_ARCHITECTURE = AMD64
+# environment
+NODE_PATH = E:\scoop\apps\yarn\current\global\node_modules
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+TEMP = C:\Users\wildr\AppData\Local\Temp
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\e5421f576c6d86fca5de0048c7a2b198-1.56.2-main-sock
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+# environment
+PROCESSOR_REVISION = 8e0c
+# makefile (from 'Makefile', line 1)
+CC = gcc
+# environment
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
+# variable set hash-table stats:
+# Load=106/1024=10%, Rehash=0, Collisions=10/132=8%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (key c:/Users/wildr/Desktop/minidns, mtime 1622710738): 22 files, no impossibilities.
+
+# 22 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2021-06-03 16:58:55
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+tools.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+dns.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 8):
+	${RM} *.o dns *.log
+
+# Not a target:
+tree.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+net.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+dns: main.o dns.o tree.o net.o tools.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 5):
+	gcc main.o net.o dns.o tools.o tree.o -o dns -lm -lws2_32 -g
+
+# Not a target:
+main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=11/1024=1%, Rehash=0, Collisions=0/26=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 27 / storage = 181 B / avg = 6 B
+# current buf: size = 8162 B / used = 181 B / count = 27 / avg = 6 B
+
+# strcache performance: lookups = 38 / hit rate = 28%
+# hash-table stats:
+# Load=27/8192=0%, Rehash=0, Collisions=0/38=0%
+# Finished Make data base on Thu Jun 03 17:01:45 2021
+
+ 

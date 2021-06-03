@@ -92,7 +92,7 @@ char *decodeQuestion(char *Query, DNSQuestion *queryquestion) {
       domain[i] = c;
     }
   }
-  memcpy(queryquestion, Query, sizeof(queryquestion));
+  memcpy(queryquestion, Query, sizeof(DNSQuestion));
   return strdup(domain + 1);
 }
 
@@ -102,8 +102,8 @@ unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
   char *Begin = Response;
   memcpy(Response, Header, sizeof(DNSHeader));
   Response += sizeof(DNSHeader);
-  memcpy(Response, servername, servernamelen);
-  Response += servernamelen;
+  memcpy(Response, servername, servernamelen + 1);
+  Response += (servernamelen + 1);
   memcpy(Response, Question, sizeof(DNSQuestion));
   Response += sizeof(DNSQuestion);
   memcpy(Response, RR, RRlen);
@@ -130,23 +130,24 @@ unsigned char findInStatic(char *name, unsigned int *x) {
   return 0;
 }
 
-unsigned short createMap(unsigned short x, int ip) {
+unsigned short createMap(unsigned short x, unsigned int ip, unsigned short port) {
   unsigned short id = pop();
-  IDMapData[id] = (IDMap){ip, x};
+  IDMapData[id] = (IDMap){ip, x, port};
   return id;
 }
 
-unsigned short deleteMap(unsigned short x, int *ip) {
+unsigned short deleteMap(unsigned short x, unsigned int *ip, unsigned short *port) {
   push(x);
   *ip = IDMapData[x].ip;
+  *port = IDMapData[x].port;
   return IDMapData[x].ID;
 }
 
-void LOG(int type, ...) {
+void LOG(int type, char *format, ...) {
   // printf ("%d\n", type);
   va_list args;
-  va_start (args, type);
-  char *format = va_arg(args, char*);
+  va_start (args, format);
+  // char *format = va_arg(args, char*);
   if ((type & NORMALMSG)) {
     vprintf (format, args);
     return;
@@ -163,7 +164,7 @@ void LOG(int type, ...) {
   }
   if ((type & DEBUGMSG) && DD) {
     printf ("DEBUG: ");
-    printf (format, args);
+    vprintf (format, args);
     return;
   }
   if ((type & LOGMSG) && logfile) {

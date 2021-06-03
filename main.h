@@ -9,8 +9,8 @@
 #include <string.h>
 #include <unistd.h>
 
-unsigned int PORT = 53;
-char Host[16] = "0.0.0.0";
-char PUBLIC_DNS_IP[16] = "119.29.29.29";
+unsigned int PORT;
+char Host[16];
+char PUBLIC_DNS_IP[16];
 
 #endif
