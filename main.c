@@ -36,6 +36,7 @@ int main(int argc, char const *argv[])
         int len;
         unsigned short port;
         char *Query = recvMessage(&ip, &len, &port);
+        if (Query == -1) continue;
         // LOG(DEBUGMSG, "Recv Msg\n");
         char *Response = malloc(4096);
         getResforReq(Query, Response, ip, port, len);

@@ -52,7 +52,8 @@ char *recvMessage(unsigned int *ip, int *len, unsigned short *port) {
     }
     else {
         LOG(ERRORMSG, "Recv Message Error\n");
-        exit(-1);
+        return (char *)-1;
+        // exit(-1);
     }
     
     // return strdup(buf);

@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 03 17:01:45 2021
+# Make data base, printed on Thu Jun 03 17:15:04 2021
 
 # Variables
 
@@ -233,7 +233,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/minidns, mtime 1622710738): 22 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/minidns, mtime 1622711432): 22 files, no impossibilities.
 
 # 22 files, no impossibilities in 1 directories.
 
@@ -246,7 +246,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-03 16:58:55
+#  Last modified 2021-06-03 17:05:31
 #  File has been updated.
 #  Successfully updated.
 
@@ -294,6 +294,14 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
+run: main.o dns.o tree.o net.o tools.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 11):
+	gcc main.o net.o dns.o tools.o tree.o -o dns -lm -lws2_32 -g
+	dns.exe
+
 dns: main.o dns.o tree.o net.o tools.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -308,19 +316,19 @@ main.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=11/1024=1%, Rehash=0, Collisions=0/26=0%
+# Load=12/1024=1%, Rehash=0, Collisions=0/32=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 27 / storage = 181 B / avg = 6 B
-# current buf: size = 8162 B / used = 181 B / count = 27 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 28 / storage = 185 B / avg = 6 B
+# current buf: size = 8162 B / used = 185 B / count = 28 / avg = 6 B
 
-# strcache performance: lookups = 38 / hit rate = 28%
+# strcache performance: lookups = 45 / hit rate = 37%
 # hash-table stats:
-# Load=27/8192=0%, Rehash=0, Collisions=0/38=0%
-# Finished Make data base on Thu Jun 03 17:01:45 2021
+# Load=28/8192=0%, Rehash=0, Collisions=0/45=0%
+# Finished Make data base on Thu Jun 03 17:15:04 2021
 
  
