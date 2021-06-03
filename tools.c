@@ -135,15 +135,20 @@ unsigned char findInStatic(char *name, char **RR, int *len) {
   // return 0;
 }
 
+unsigned char Used[65536];
+
 unsigned short createMap(unsigned short x, unsigned int ip, unsigned short port) {
   unsigned short id = pop();
+  Used[id] = 1;
   IDMapData[id] = (IDMap){ip, x, port};
   return id;
 }
 
-unsigned short deleteMap(unsigned short x, unsigned int *ip, unsigned short *port) {
+int deleteMap(unsigned short x, unsigned int *ip, unsigned short *port) {
+  if (Used[x] == 0) return -1;
   push(x);
   *ip = IDMapData[x].ip;
   *port = IDMapData[x].port;
+  Used[x] = 0;
   return IDMapData[x].ID;
 }

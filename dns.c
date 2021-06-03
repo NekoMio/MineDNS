@@ -105,7 +105,13 @@ unsigned short getResforReq(char *Query, char *Response, unsigned int qip,
   } else {
     unsigned int ip;
     unsigned short port;
-    queryheader.ID = deleteMap(queryheader.ID, &ip, &port);
+    int tmpid = deleteMap(queryheader.ID, &ip, &port);
+    if (tmpid == -1) {
+      free(queryqname);
+      return 0;
+    } else {
+      queryheader.ID = tmpid;
+    }
     memcpy(Query, &queryheader, sizeof(queryheader));
     sendMessage(Query, len, ip, port);
   }

@@ -18,7 +18,7 @@ unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
                         int RRlen, char *servername, char *Response,
                         int servernamelen);
 unsigned char findInStatic(char *name, char **RR, int *len);
-unsigned short deleteMap(unsigned short x, unsigned int *ip, unsigned short *port);
+int deleteMap(unsigned short x, unsigned int *ip, unsigned short *port);
 unsigned short createMap(unsigned short x, unsigned int ip, unsigned short port);
 typedef struct IDMapStruct{
     unsigned int ip;
