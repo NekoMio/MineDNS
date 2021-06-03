@@ -55,7 +55,9 @@ extern char PUBLIC_DNS_IP[16];
 unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
                       char *queryqname, char *Response, unsigned int qip,
                       unsigned short port);
-unsigned short solveAAAA(char *queryqname, char *Response);
+unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
+                      char *queryqname, char *Response, unsigned int qip,
+                      unsigned short port);
 unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
                            char *queryname, char *Response, unsigned int qip,
                            unsigned short port);

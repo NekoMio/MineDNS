@@ -5,7 +5,6 @@
 unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
                       char *queryqname, char *Response, unsigned int qip,
                       unsigned short port) {
-  unsigned int x = 0;
   int RRlen = 0;
   char *RR;
   if (findInStatic(queryqname, &RR, &RRlen)) {
@@ -24,7 +23,26 @@ unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
   return solveRemote(Header, Question, queryqname, Response, qip, port);
 }
 
-unsigned short solveAAAA(char *queryqname, char *Response) {}
+unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
+                      char *queryqname, char *Response, unsigned int qip,
+                      unsigned short port) {
+  int RRlen = 0;
+  char *RR;
+  if (findInStatic(queryqname, &RR, &RRlen) && RRlen == 0) {
+    char *servername = encodeName(queryqname);
+    int servernamelen = strlen(servername);
+    Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
+    if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags), RCODE, 3));
+    Header->qdcount = htons(1);
+    Header->ancount = htons(0);
+    unsigned short len = packData(Header, Question, RR, RRlen, servername,
+                                  Response, servernamelen);
+    free(servername);
+    sendMessage(Response, len, qip, port);
+    return 0;
+  }
+  return solveRemote(Header, Question, queryqname, Response, qip, port);
+}
 
 unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
                            char *queryname, char *Response, unsigned int qip,
@@ -68,8 +86,8 @@ unsigned short getResforReq(char *Query, char *Response, unsigned int qip,
           solveA(&queryheader, &queryquestion, queryqname, Response, qip, port);
           break;
         case AAAARR:
-          // solveAAAA(queryqname, Response);
-          // break;
+          solveAAAA(&queryheader, &queryquestion, queryqname, Response, qip, port);
+          break;
         case CNAMERR:
           // solveCNAME(queryqname, Response);
           // break;
