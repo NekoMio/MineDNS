@@ -20,15 +20,15 @@ Node *search(RBTree x, Type key) {
   }
 }
 
-Type search_tree(RBRoot *root, Type key) {
+const char *search_tree(RBRoot *root, Type key) {
   if (root) {
     RBTree ret = search(root->node, key);
     if (ret == NULL)
-      return -1;
+      return NULL;
     else
       return ret->value;
   }
-  return -1;
+  return NULL;
 }
 
 void left_rotate(RBRoot *root, Node *x) {
@@ -154,13 +154,13 @@ void insertnode(RBRoot *root, Node *node) {
   insert_fixup(root, node);
 }
 
-Node *NewNode(Type key, Type value, Node *parent, Node *left, Node *right) {
+Node *NewNode(Type key, char *value, Node *parent, Node *left, Node *right) {
   Node *p;
   if ((p = malloc(sizeof(Node))) == NULL) {
     return NULL;
   }
   p->key = key;
-  p->value = value;
+  p->value = strdup(value);
   p->left = left;
   p->right = right;
   p->parent = parent;
@@ -169,7 +169,7 @@ Node *NewNode(Type key, Type value, Node *parent, Node *left, Node *right) {
   return p;
 }
 
-Node *insert_tree(RBRoot *root, Type key, Type value) {
+Node *insert_tree(RBRoot *root, Type key, char* value) {
   Node *node;
   if ((node = search(root->node, key)) != NULL) {
     return node;
@@ -284,6 +284,7 @@ void deletenode(RBRoot *root, Node *node) {
     if (color == BLACK) {
       delete_fixup(root, child, parent);
     }
+    free(node->value);
     free(node);
     return;
   }
@@ -311,6 +312,7 @@ void deletenode(RBRoot *root, Node *node) {
   if (color == BLACK) {
     delete_fixup(root, child, parent);
   }
+  free(node->value);
   free(node);
 }
 

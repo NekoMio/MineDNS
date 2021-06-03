@@ -17,11 +17,9 @@ char *decodeQuestion(char *Query, DNSQuestion *queryquestion);
 unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
                         int RRlen, char *servername, char *Response,
                         int servernamelen);
-unsigned char findInStatic(char *name, unsigned int *x);
+unsigned char findInStatic(char *name, char **RR, int *len);
 unsigned short deleteMap(unsigned short x, unsigned int *ip, unsigned short *port);
 unsigned short createMap(unsigned short x, unsigned int ip, unsigned short port);
-void LOG(int type, char *format, ...);
-
 typedef struct IDMapStruct{
     unsigned int ip;
     unsigned short ID;
@@ -32,13 +30,5 @@ IDMap IDMapData[65536];
 
 unsigned short IDMapQueue[65537];
 int IDMapQueueLeft, IDMapQueueRight;
-
-typedef enum {
-    NORMALMSG = 1,
-    WARNINGMSG = 2,
-    ERRORMSG = 4,
-    DEBUGMSG = 8,
-    LOGMSG = 16
-} LOGTYPE;
 
 #endif

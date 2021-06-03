@@ -1,33 +1,21 @@
 #include "dns.h"
+#include "net.h"
+#include "tools.h"
 
 unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
                       char *queryqname, char *Response, unsigned int qip,
                       unsigned short port) {
   unsigned int x = 0;
   int RRlen = 0;
-  char *RR = malloc(1024);
-  char *RRbegin = RR;
-  if (findInStatic(queryqname, &x)) {
+  char *RR;
+  if (findInStatic(queryqname, &RR, &RRlen)) {
     char *servername = encodeName(queryqname);
     int servernamelen = strlen(servername);
-    SetFlags(Header->flags, QR, 1);
-    Header->qdcount = 1;
-    Header->ancount = (x == 0 ? 0 : 1);
-    if (x != 0) {
-      DNSrr *RRa = malloc(sizeof(DNSrr));
-      RRa->type = ARR;
-      RRa->dclass = 1;
-      RRa->ttl = 600;
-      RRa->rdlengtn = 4;
-      memcpy(RR, servername, servernamelen);
-      RR += servernamelen;
-      memcpy(RR, RRa, sizeof(DNSrr));
-      RR += sizeof(DNSrr);
-      memcpy(RR, &x, sizeof(int));
-      RR += 4;
-      RRlen = RR - RRbegin;
-    }
-    unsigned short len = packData(Header, Question, RRbegin, RRlen, servername,
+    Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
+    if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags), RCODE, 3));
+    Header->qdcount = htons(1);
+    Header->ancount = htons(RRlen == 0 ? 0 : 1);
+    unsigned short len = packData(Header, Question, RR, RRlen, servername,
                                   Response, servernamelen);
     free(servername);
     sendMessage(Response, len, qip, port);
@@ -43,6 +31,7 @@ unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
                            unsigned short port) {
   char *servername = encodeName(queryname);
   int servernamelen = strlen(servername);
+  // cache();
   Header->ID = createMap(Header->ID, qip, port);
   queryForRemote(Header, Question, servername, servernamelen, Response);
   // decodeHeader(Response, Header);

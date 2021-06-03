@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 03 17:15:04 2021
+# Make data base, printed on Thu Jun 03 23:22:51 2021
 
 # Variables
 
@@ -25,7 +25,7 @@ USERPROFILE = C:\Users\wildr
 # environment
 LOCALAPPDATA = C:\Users\wildr\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-935f8d85-9763-4e38-821e-31aead2ada6f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-9b081c7c-595d-4933-a25f-a7eb883982f4-sock
 # environment
 VSCODE_CWD = C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -39,7 +39,7 @@ MAKE_COMMAND := E:/scoop/apps/gcc/current/bin/mingw32-make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16388_KTTZBCAKMXXRFLLU
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_7180_WJHIUCJJKIYQJBFP
 # environment
 ONEDRIVECOMMERCIAL = C:\Users\wildr\OneDrive - bupt.edu.cn
 # environment
@@ -95,7 +95,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 16388
+VSCODE_PID = 7180
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -189,7 +189,7 @@ VSCODE_NODE_CACHED_DATA_DIR = C:\Users\wildr\AppData\Roaming\Code\CachedData\054
 # environment
 APPDATA = C:\Users\wildr\AppData\Roaming
 # makefile (from 'Makefile', line 2)
-CFLAGS = 
+CFLAGS = -g
 # environment
 HOMEDRIVE = C:
 # environment
@@ -233,9 +233,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/minidns, mtime 1622711432): 22 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/minidns, mtime 1622733763): 29 files, no impossibilities.
 
-# 22 files, no impossibilities in 1 directories.
+# 29 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -246,7 +246,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-03 17:05:31
+#  Last modified 2021-06-03 23:22:35
 #  File has been updated.
 #  Successfully updated.
 
@@ -258,6 +258,12 @@ tools.o:
 
 # Not a target:
 dns.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+trie.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -294,20 +300,20 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
-run: main.o dns.o tree.o net.o tools.o
+run: main.o dns.o tree.o net.o tools.o trie.o log.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 11):
-	gcc main.o net.o dns.o tools.o tree.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o -o dns -lm -lws2_32 -g
 	dns.exe
 
-dns: main.o dns.o tree.o net.o tools.o
+dns: main.o dns.o tree.o net.o tools.o trie.o log.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 5):
-	gcc main.o net.o dns.o tools.o tree.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o -o dns -lm -lws2_32 -g
 
 # Not a target:
 main.o:
@@ -315,20 +321,26 @@ main.o:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+log.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/32=0%
+# Load=14/1024=1%, Rehash=0, Collisions=0/38=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 28 / storage = 185 B / avg = 6 B
-# current buf: size = 8162 B / used = 185 B / count = 28 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 35 / storage = 237 B / avg = 6 B
+# current buf: size = 8162 B / used = 237 B / count = 35 / avg = 6 B
 
-# strcache performance: lookups = 45 / hit rate = 37%
+# strcache performance: lookups = 56 / hit rate = 37%
 # hash-table stats:
-# Load=28/8192=0%, Rehash=0, Collisions=0/45=0%
-# Finished Make data base on Thu Jun 03 17:15:04 2021
+# Load=35/8192=0%, Rehash=0, Collisions=0/56=0%
+# Finished Make data base on Thu Jun 03 23:22:51 2021
 
  

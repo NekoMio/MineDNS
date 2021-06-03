@@ -1,5 +1,5 @@
 #include "net.h"
-
+#include "log.h"
 
 void init_socket() {
 #ifdef WIN32
@@ -17,7 +17,7 @@ void init_socket() {
     // serverAddr.sin_addr.s_addr = inet_addr(PUBLIC_DNS_IP);
     // serverAddr.sin_port = htons(PORT);
 
-    const int REUSE = 1;
+    const char REUSE = 1;
     setsockopt(Sock, SOL_SOCKET, SO_REUSEADDR, &REUSE, sizeof(REUSE));
     // printf ("error\n");
     
@@ -51,7 +51,7 @@ char *recvMessage(unsigned int *ip, int *len, unsigned short *port) {
         return ret;
     }
     else {
-        LOG(ERRORMSG, "Recv Message Error\n");
+        LOG(WARNINGMSG, "Recv Message Error\n");
         return (char *)-1;
         // exit(-1);
     }

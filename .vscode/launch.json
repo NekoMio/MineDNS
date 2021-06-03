@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/dns.exe",
-            "args": [],
+            "args": ["-d"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

@@ -1,6 +1,8 @@
 #ifndef treeH
 #define treeH
 
+#include <string.h>
+
 enum { RED, BLACK };
 
 typedef long long Type;
@@ -8,7 +10,7 @@ typedef long long Type;
 typedef struct RBTreeNode {
     unsigned char color;
     Type key;
-    Type value;
+    char *value;
     struct RBTreeNode *left;
     struct RBTreeNode *right;
     struct RBTreeNode *parent;
@@ -22,11 +24,11 @@ RBRoot *create_tree();
 
 void free_tree(RBRoot *root);
 
-Node *insert_tree(RBRoot *root, Type key, Type value);
+Node *insert_tree(RBRoot *root, Type key, char* value);
 
 void delete_tree(RBRoot *root, Type key);
 
-Type search_tree(RBRoot *root, Type key);
+const char *search_tree(RBRoot *root, Type key);
 
 typedef RBRoot Map;
 
