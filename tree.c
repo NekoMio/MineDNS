@@ -1,351 +1,139 @@
 #include "tree.h"
+#include "trie.h"
+#include "log.h"
+
 #include <stdlib.h>
 
+Node *NewNode(int x, unsigned short type, char *value) {
+  Node *rt = malloc(sizeof(Node));
+  rt->s = 1, rt->key = rand();
+  rt->x = x;
+  rt->type = type;
+  rt->value = strdup(value);
+  rt->ch[0] = rt->ch[1] = NULL;
+  rt->fa = NULL;
+}
+void Pushup(Node *rt) {
+  rt->s = size(rt->ch[0]) + size(rt->ch[1]) + 1;
+  if (rt->ch[0]) rt->ch[0]->fa = rt;
+  if (rt->ch[1]) rt->ch[1]->fa = rt;
+}
+Node *Merge(Node *A, Node *B) {
+  if (!A) return B;
+  if (!B) return A;
+  if (A->key < B->key) {
+    A->ch[1] = Merge(A->ch[1], B);
+    // if (A->ch[1]) A->ch[1]->fa = A;
+    Pushup(A);
+    return A;
+  } else {
+    B->ch[0] = Merge(A, B->ch[0]);
+    Pushup(B);
+    return B;
+  }
+}
+typedef struct Node2 {
+  Node *first, *second;
+} DNode;
+DNode Split(Node *rt, int k) {
+  if (!rt) return (DNode){NULL, NULL};
+  DNode o;
+  if (size(rt->ch[0]) >= k) {
+    o = Split(rt->ch[0], k);
+    rt->ch[0] = o.second;
+    Pushup(rt);
+    o.second = rt;
+  } else {
+    o = Split(rt->ch[1], k - size(rt->ch[0]) - 1);
+    rt->ch[1] = o.first;
+    Pushup(rt);
+    o.first = rt;
+  }
+  return o;
+}
+Node *kth(RBRoot *rt, int k) {
+  DNode x = Split(rt->node, k - 1);
+  DNode y = Split(x.second, 1);
+  Node *ans = y.first;
+  rt->node = Merge(Merge(x.first, ans), y.second);
+  return ans;
+}
+int Rank(Node *rt, time_t x) {
+  if (!rt) return 0;
+  return x < rt->x ? Rank(rt->ch[0], x)
+                    : Rank(rt->ch[1], x) + size(rt->ch[0]) + 1;
+}
+void Insert(RBRoot *rt, Node *x) {
+  int k = Rank(rt->node, x->x);
+  DNode y = Split(rt->node, k);
+  rt->node = Merge(Merge(y.first, x), y.second);
+}
+
 RBRoot *create_tree() {
-  RBRoot *root = malloc(sizeof(RBRoot));
-  root->node = NULL;
-
-  return root;
+  RBRoot *rt = malloc(sizeof(RBRoot));
+  rt->node = NULL;
+  return rt;
 }
 
-Node *search(RBTree x, Type key) {
-  if (x == NULL || x->key == key) {
-    return x;
-  }
-  if (key < x->key) {
-    return search(x->left, key);
-  } else {
-    return search(x->right, key);
-  }
+Node *insert_tree(RBRoot *root, Type key, char *value, unsigned short type) {
+  Node *x = NewNode(key, type, value);
+  Insert(root, x);
+  return x;
 }
 
-const char *search_tree(RBRoot *root, Type key) {
-  if (root) {
-    RBTree ret = search(root->node, key);
-    if (ret == NULL)
-      return NULL;
-    else
-      return ret->value;
-  }
-  return NULL;
+Node *findtoswap(Node *rt) {
+  if (rt->ch[0] == NULL) return rt;
+  return findtoswap(rt->ch[0]);
 }
 
-void left_rotate(RBRoot *root, Node *x) {
-  Node *y = x->right;
-  x->right = y->left;
-  if (y->left != NULL) {
-    y->left->parent = x;
-  }
-  y->parent = x->parent;
-
-  if (x->parent == NULL) {
-    root->node = y;
-  } else {
-    if (x->parent->left == x) {
-      x->parent->left = y;
+void delete_treenode(RBRoot *root, Node *rt) {
+  if (rt->ch[0] == NULL || rt->ch[1] == NULL) {
+    if (rt->fa != NULL) {
+        ((rt->fa->ch[0] == rt) ? (rt->fa->ch[0] = (rt->ch[0] ? rt->ch[0] : rt->ch[1])) : (rt->fa->ch[1] = (rt->ch[0] ? rt->ch[0] : rt->ch[1])));
+        ((rt->ch[0]) ? (rt->ch[0]->fa = rt->fa) : (rt->ch[1]->fa = rt->fa));
     } else {
-      x->parent->right = x;
-    }
-  }
-
-  y->left = x;
-  x->parent = y;
-}
-
-void right_rotate(RBRoot *root, Node *y) {
-  Node *x = y->left;
-  y->left = x->right;
-  if (x->right != NULL) {
-    x->right->parent = y;
-  }
-  x->parent = y->parent;
-
-  if (y->parent == NULL) {
-    root->node = x;
-  } else {
-    if (y == y->parent->right) {
-      y->parent->right = x;
-    } else {
-      y->parent->left = x;
-    }
-  }
-  x->right = y;
-  y->parent = x;
-}
-
-void insert_fixup(RBRoot *root, Node *node) {
-  Node *parent, *gparent;
-  while ((parent = node->parent) && parent->color == RED) {
-    gparent = parent->parent;
-    if (parent == gparent->left) {
-      {
-        Node *uncle = gparent->right;
-        if (uncle && uncle->color == RED) {
-          uncle->color = BLACK;
-          parent->color = BLACK;
-          gparent->color = RED;
-          node = gparent;
-          continue;
-        }
-      }
-      if (parent->right == node) {
-        Node *tmp;
-        left_rotate(root, parent);
-        tmp = parent;
-        parent = node;
-        node = tmp;
+      if (rt->ch[0]) {
+        root->node = rt->ch[0];
+        rt->ch[0]->fa = NULL;
       } else {
-        parent->color = BLACK;
-        gparent->color = RED;
-        right_rotate(root, gparent);
-      }
-    } else {
-      {
-        Node *uncle = gparent->left;
-        if (uncle && uncle->color == RED) {
-          uncle->color = BLACK;
-          parent->color = BLACK;
-          gparent->color = RED;
-          node = gparent;
-          continue;
-        }
-      }
-      if (parent->left == node) {
-        Node *tmp;
-        right_rotate(root, parent);
-        tmp = parent;
-        parent = node;
-        node = tmp;
-      } else {
-        parent->color = BLACK;
-        gparent->color = RED;
-        left_rotate(root, gparent);
+        root->node = rt->ch[1];
+        rt->ch[1]->fa = NULL;
       }
     }
-  }
-
-  root->node->color = BLACK;
-}
-
-void insertnode(RBRoot *root, Node *node) {
-  Node *y = NULL;
-  Node *x = root->node;
-  while (x != NULL) {
-    y = x;
-    if (node->key < x->key) {
-      x = x->left;
-    } else {
-      x = x->right;
-    }
-  }
-  node->parent = y;
-  if (y != NULL) {
-    if (node->key < y->key) {
-      y->left = node;
-    } else {
-      y->right = node;
-    }
-  } else {
-    root->node = node;
-  }
-  node->color = RED;
-
-  insert_fixup(root, node);
-}
-
-Node *NewNode(Type key, char *value, unsigned short type, Node *parent, Node *left, Node *right) {
-  Node *p;
-  if ((p = malloc(sizeof(Node))) == NULL) {
-    return NULL;
-  }
-  p->key = key;
-  p->value = strdup(value);
-  p->type = type;
-  p->left = left;
-  p->right = right;
-  p->parent = parent;
-  p->color = BLACK;
-
-  return p;
-}
-
-Node *insert_tree(RBRoot *root, Type key, char* value, unsigned short type) {
-  Node *node;
-  // if ((node = search(root->node, key)) != NULL) {
-  //   return node;
-  // }
-  if ((node = NewNode(key, value, type, NULL, NULL, NULL)) == NULL) return NULL;
-
-  insertnode(root, node);
-
-  return node;
-}
-
-void delete_fixup(RBRoot *root, Node *node, Node *parent) {
-  Node *other;
-  while ((!node || node->color == BLACK) && (node != root->node)) {
-    if (parent->left == node) {
-      other = parent->right;
-      if (other->color == RED) {
-        other->color = BLACK;
-        parent->color = RED;
-        left_rotate(root, parent);
-        other = parent->right;
-      }
-      if ((!other->left || other->left->color == BLACK) &&
-          (!other->right || other->right->color == BLACK)) {
-        other->color = RED;
-        node = parent;
-        parent = node->parent;
-      } else {
-        if (!other->right || other->right->color == BLACK) {
-          other->left->color = BLACK;
-          other->color = RED;
-          right_rotate(root, other);
-          other = parent->right;
-        } else {
-          other->color = parent->color;
-          parent->color = BLACK;
-          other->right->color = BLACK;
-          left_rotate(root, parent);
-          node = root->node;
-          break;
-        }
-      }
-    } else {
-      other = parent->left;
-      if (other->color == RED) {
-        other->color = BLACK;
-        parent->color = RED;
-      }
-      if ((!other->left || other->left->color == BLACK) &&
-          (!other->right || other->right->color == RED)) {
-        other->color = RED;
-        node = parent;
-        parent = node->parent;
-      }
-      else {
-        if (!other->left || other->left->color == BLACK) {
-          other->right->color = BLACK;
-          other->color = RED;
-          left_rotate(root, other);
-          other = parent->left;
-        } else {
-          other->color = parent->color;
-          parent->color = BLACK;
-          other->left->color = BLACK;
-          right_rotate(root, parent);
-          node = root->node;
-          break;
-        }
-      }
-    }
-  }
-  if (node) {
-    node->color = BLACK;
-  }
-}
-
-void deletenode(RBRoot *root, Node *node) {
-  Node *child, *parent;
-  int color;
-  if ((node->left != NULL) && (node->right != NULL)) {
-    Node *replace = node;
-    replace = replace->right;
-    while (replace->left != NULL) replace = replace->left;
-    if (node->parent != NULL) {
-      if (node->parent->left == node) {
-        node->parent->left = replace;
-      } else {
-        node->parent->right = replace;
-      }
-    } else {
-      root->node = replace;
-    }
-
-    child = replace->right;
-    parent = replace->parent;
-    color = replace->color;
-
-    if (parent == node) {
-      parent = replace;
-    } else {
-      if (child) child->parent = parent;
-      parent->left = child;
-
-      replace->right = node->right;
-      node->right->parent = replace;
-    }
-    replace->parent = node->parent;
-    replace->color = node->color;
-    replace->left = node->left;
-    node->left->parent = replace;
-
-    if (color == BLACK) {
-      delete_fixup(root, child, parent);
-    }
-    free(node->value);
-    free(node);
     return;
-  }
-  if (node->left != NULL) {
-    child = node->left;
   } else {
-    child = node->right;
+    Node *twp = findtoswap(rt->ch[1]);
+    Node tmp;
+    tmp = *twp;
+    *twp = *rt;
+    *rt = tmp;
+    twp->key = rt->key;
+    rt->key = tmp.key;
+    delete_treenode(root, rt);
   }
-  parent = node->parent;
-  color = node->color;
+}
 
-  if (child) {
-    child->parent = parent;
-  }
-
-  if (parent) {
-    if (parent->left == node) {
-      parent->left = child;
-    } else {
-      parent->right = child;
-    }
-  } else {
-    root->node = child;
-  }
-  if (color == BLACK) {
-    delete_fixup(root, child, parent);
-  }
-  free(node->value);
-  free(node);
+void DFS_Delete(Node *rt) {
+  LOG(DEBUGMSG, "%s type:%d TTL timeout delete from cache\n", rt->value, rt->type);
+  delete_trie(cacheData, rt->value, rt->type);
+  if (rt->ch[0] != NULL) DFS_Delete(rt->ch[0]);
+  if (rt->ch[1] != NULL) DFS_Delete(rt->ch[1]);
 }
 
 void delete_tree(RBRoot *root, Type key) {
-  Node *node;
-  if ((node = search(root->node, key)) != NULL) {
-    deletenode(root, node);
+  int k = Rank(root->node, key);
+  if (k != 0) {
+    DNode y = Split(root->node, k);
+    DFS_Delete(y.first);
   }
 }
 
-void freenode(Node *root) {
-  if (root->left != NULL) {
-    freenode(root->left);
-  }
-  if (root->right != NULL) {
-    freenode(root->right);
-  }
-  free(root);
-}
-void free_tree(RBRoot *root) {
-  if (root != NULL && root->node != NULL) {
-    freenode(root->node);
-  }
+// Node *search(Node *rt, Type key) {
+//   if (rt == NULL || rt->key == key) {
+//     // return x;
+//   }
+// }
 
-  free(root);
-}
+// const char *search_tree(RBRoot *root, Type key) {
 
-Node *searchminnode(Node *rt) {
-  if (rt->left != NULL) return searchminnode(rt->left);
-  else return rt;
-}
-
-Node *search_min(RBRoot *root) {
-  if (root->node == NULL) return NULL;
-  return searchminnode(root->node);
-}
+// }

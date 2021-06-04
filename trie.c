@@ -1,5 +1,6 @@
 #include "trie.h"
-
+#include "tree.h"
+#include "link.h"
 #include "log.h"
 #include "malloc.h"
 
@@ -45,7 +46,7 @@ void free_trie(TrieRoot *root) {
 }
 
 TNode *insert_trie(TrieRoot *root, char *key, unsigned short type, char *data,
-                   int len) {
+                   int len, time_t ttl, Node *nrt) {
   int keylen = strlen(key);
   if (type > 33) return NULL;
   if (root->node[type] == NULL) {
@@ -63,10 +64,13 @@ TNode *insert_trie(TrieRoot *root, char *key, unsigned short type, char *data,
   rt->flag = 1;
   rt->data = malloc(len);
   rt->len = len;
+  rt->ttl = ttl;
+  cachesize++;
   memcpy(rt->data, data, len);
+  if (nrt != NULL) rt->lkn = add_front(lru, key, type, nrt);
 }
 
-char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len) {
+char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len, time_t *ttl) {
   int keylen = strlen(key);
   if (type > 33 || root->node[type] == NULL) {
     *len = -1;
@@ -76,15 +80,19 @@ char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len) {
   for (int i = 0; i < keylen; i++) {
     if (!rt->ch[trans(key[i])]) {
       *len = -1;
+      *ttl = 0;
       return NULL;
     }
     rt = rt->ch[trans(key[i])];
   }
   if (rt->flag) {
     *len = rt->len;
+    *ttl = rt->ttl;
     if (*len == 0) return NULL;
+    move_front(lru, rt->lkn);
     return rt->data;
   } else {
+    *ttl = 0;
     *len = -1;
     return NULL;
   }
@@ -105,6 +113,8 @@ void delete_trie(TrieRoot *root, char *key, unsigned short type) {
     }
   }
   rt->flag = 0;
+  cachesize--;
+  link_delnode(lru, rt->lkn);
   free(rt->data);
   if (delRT != NULL) {
     freeTrienode(delRT);

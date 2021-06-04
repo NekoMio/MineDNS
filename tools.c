@@ -1,14 +1,15 @@
 #include "tools.h"
-#include "tree.h"
-#include <string.h>
-#include "log.h"
 
+#include <string.h>
+
+#include "log.h"
+#include "tree.h"
 #include "trie.h"
 
-int DD = 0;
+int DD = 0, QUIET;
 FILE *logfile = NULL;
 int cachesize = 0, cachemax = 4096;
-Map *lru;
+link *lru;
 Map *timeout;
 
 unsigned short unPackFlags(unsigned short flags, int type) {
@@ -126,54 +127,34 @@ unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
   return Response - Begin;
 }
 
-int AddL(int *R) {
-  int ret = *R;
-  *R++;
-  if (*R == 65537) *R = 0;
-  return ret;
-}
-
-void push(int x) {
-  IDMapQueue[IDMapQueueRight] = x;
-  IDMapQueueRight++;
-  if (IDMapQueueRight == 65537) IDMapQueueRight = 0;
-}
-int pop() {
-  if (IDMapQueueRight == IDMapQueueLeft)
-    return -1;
-  else
-    return IDMapQueue[AddL(&IDMapQueueLeft)];
-}
-
 void checkttltimeout() {
   time_t now = time(NULL);
-  Node *rt = search_min(timeout);
-  while (rt && rt->key < now) {
-    LOG(DEBUGMSG, "%s type:%d TTL timeout delete from cache\n", rt->value, rt->type);
-    delete_trie(cacheData, rt->value, rt->type);
-    deletenode(timeout, rt);
-    rt = search_min(timeout);
-  }
+  delete_tree(timeout, now);
+  // Node *rt = search_min(timeout);
+  // while (rt && rt->key < now) {
+  //   LOG(DEBUGMSG, "%s type:%d TTL timeout delete from cache\n", rt->value,
+  //   rt->type);
+
+  //   deletenode(timeout, rt);
+  //   rt = search_min(timeout);
+  // }
 }
 
-void updatelru(char *name, unsigned short type) {
-
-}
 
 void lruDelete() {
-
+  link_popback(lru);
 }
 
-void addttltimeout(char *name, unsigned short type, time_t ttl) {
-  insert_tree(timeout, ttl + time(NULL), name, type);
+Node *addttltimeout(char *name, unsigned short type, time_t ttl) {
+  return insert_tree(timeout, ttl, name, type);
 }
 
 unsigned char searchinCache(char *name, unsigned short type, char **RR,
-                            int *len) {
+                            int *len, time_t *ttl) {
   // int len = 0;
   checkttltimeout();
-  updatelru(name, type);
-  *RR = search_trie(cacheData, type, name, len);
+  // updatelru(name, type);
+  *RR = search_trie(cacheData, type, name, len, ttl);
   if (*len == -1)
     return 0;
   else
@@ -181,14 +162,16 @@ unsigned char searchinCache(char *name, unsigned short type, char **RR,
   // return 0;
 }
 
-void addtoCache(char *name, unsigned short type, time_t ttl, char *RR, int *len) {
+void addtoCache(char *name, unsigned short type, time_t ttl, char *RR,
+                int *len) {
   LOG(DEBUGMSG, "%s type:%d Add to Cache\n", name, type);
   if (cachesize == cachemax) {
     lruDelete();
+    cachesize--;
   }
-  addttltimeout(name, type, ttl);
-  updatelru(name, type);
-  insert_trie(cacheData, name, type, RR, *len);
+  // updatelru(name, type);
+  // cachesize++;
+  insert_trie(cacheData, name, type, RR, *len, time(NULL), addttltimeout(name, type, ttl));
 }
 
 unsigned int unpackforttl(char *Query, unsigned short num) {
@@ -196,28 +179,55 @@ unsigned int unpackforttl(char *Query, unsigned short num) {
   DNSrr TMP;
   for (int i = 0; i < num; i++) {
     Query += 2;
-    memcpy(&TMP, Query, sizeof (TMP));
+    memcpy(&TMP, Query, sizeof(TMP));
     minval = min(minval, ntohl(TMP.ttl));
     Query += ntohs(TMP.rdlengtn);
   }
   return minval;
 }
 
-unsigned char Used[65536];
+void Change(char *Query, unsigned short num, time_t ttl) {
+  DNSrr TMP;
+  for (int i = 0; i < num; i++) {
+    Query += 2;
+    memcpy(&TMP, Query, sizeof(TMP));
+    if (ttl == -1)
+      TMP.ttl = ntohl(600);
+    else
+      TMP.ttl = ntohl(TMP.ttl) + ttl - time(NULL);
+    memcpy(Query, &TMP, sizeof(TMP));
+    Query += ntohs(TMP.rdlengtn);
+  }
+}
+
+void changeTTL(char *RR, int RRlen, time_t ttl) {
+  DNSHeader header;
+  DNSQuestion question;
+  decodeHeader(RR, &header);
+
+  int querylen = 0;
+  decodeQuestion(RR + sizeof(header), &question, &querylen);
+  Change(RR + sizeof(header) + querylen, ntohs(header.qdcount), ttl);
+}
+
+// unsigned char Used[65536];
 
 unsigned short createMap(unsigned short x, unsigned int ip,
                          unsigned short port) {
-  unsigned short id = pop();
-  Used[id] = 1;
-  IDMapData[id] = (IDMap){ip, x, port};
-  return id;
+  while (IDMapData[IDMapID].used != 0 && time(NULL) - IDMapData[IDMapID].inTime < 2) {
+    IDMapID++;
+  }
+  IDMapData[IDMapID].used = 1;
+  IDMapData[IDMapID].ip = ip;
+  IDMapData[IDMapID].ID = x;
+  IDMapData[IDMapID].port = port;
+  IDMapData[IDMapID].inTime = time(NULL);
+  return IDMapID++;
 }
 
 int deleteMap(unsigned short x, unsigned int *ip, unsigned short *port) {
-  if (Used[x] == 0) return -1;
-  push(x);
+  IDMapData[x].used = 0;
   *ip = IDMapData[x].ip;
   *port = IDMapData[x].port;
-  Used[x] = 0;
   return IDMapData[x].ID;
 }

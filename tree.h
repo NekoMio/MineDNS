@@ -4,19 +4,17 @@
 #include "time.h"
 #include <string.h>
 
-enum { RED, BLACK };
 
 typedef time_t Type;
 
-typedef struct RBTreeNode {
-    unsigned char color;
-    Type key;
-    char *value;
-    unsigned short type;
-    struct RBTreeNode *left;
-    struct RBTreeNode *right;
-    struct RBTreeNode *parent;
-}Node, *RBTree;
+typedef struct NodeData {
+  int s, key;
+  Type x;
+  char *value;
+  unsigned short type;
+  struct NodeData *ch[2], *fa;
+#define size(_) ((_) ? (_)->s : 0)
+}Node;
 
 typedef struct rbroot {
     Node *node;
@@ -30,15 +28,12 @@ Node *insert_tree(RBRoot *root, Type key, char* value, unsigned short type);
 
 void delete_tree(RBRoot *root, Type key);
 
-void deletenode(RBRoot *root, Node *node);
-
-Node *search_min(RBRoot *root);
-
 const char *search_tree(RBRoot *root, Type key);
+
+void delete_treenode(RBRoot *root, Node *rt);
 
 typedef RBRoot Map;
 
-extern Map *lru;
 extern Map *timeout;
 
 #endif

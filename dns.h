@@ -52,14 +52,13 @@ extern unsigned int PORT;
 extern char Host[16];
 extern char PUBLIC_DNS_IP[16];
 
-unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
-                      char *queryqname, char *Response, unsigned int qip,
-                      unsigned short port);
-unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
-                         char *queryqname, char *Response, unsigned int qip,
-                         unsigned short port);
-unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
-                           char *queryname, char *Response, unsigned int qip,
+// unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
+//                       char *queryqname, char *Response, unsigned int qip,
+//                       unsigned short port);
+// unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
+//                          char *queryqname, char *Response, unsigned int qip,
+//                          unsigned short port);
+unsigned short solveRemote(DNSHeader *Header, char *Query, char *Response, unsigned int qip,
                            unsigned short port);
 
 unsigned short getResforReq(char *Query, char *Response, unsigned int qip,

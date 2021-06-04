@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 04 19:42:15 2021
+# Make data base, printed on Sat Jun 05 00:40:15 2021
 
 # Variables
 
@@ -233,9 +233,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/minidns, mtime 1622806885): 25 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/minidns, mtime 1622824755): 30 files, no impossibilities.
 
-# 25 files, no impossibilities in 1 directories.
+# 30 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -244,9 +244,15 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 # Files
 
 # Not a target:
+link.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-04 19:41:51
+#  Last modified 2021-06-05 00:39:48
 #  File has been updated.
 #  Successfully updated.
 
@@ -300,20 +306,20 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
-run: main.o dns.o tree.o net.o tools.o trie.o log.o
+run: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 11):
-	gcc main.o net.o dns.o tools.o tree.o trie.o log.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32 -g
 	dns.exe
 
-dns: main.o dns.o tree.o net.o tools.o trie.o log.o
+dns: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 5):
-	gcc main.o net.o dns.o tools.o tree.o trie.o log.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32 -g
 
 # Not a target:
 main.o:
@@ -328,19 +334,19 @@ log.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=14/1024=1%, Rehash=0, Collisions=0/38=0%
+# Load=15/1024=1%, Rehash=0, Collisions=0/41=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 35 / storage = 237 B / avg = 6 B
-# current buf: size = 8162 B / used = 237 B / count = 35 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 37 / storage = 250 B / avg = 6 B
+# current buf: size = 8162 B / used = 250 B / count = 37 / avg = 6 B
 
-# strcache performance: lookups = 52 / hit rate = 32%
+# strcache performance: lookups = 59 / hit rate = 37%
 # hash-table stats:
-# Load=35/8192=0%, Rehash=0, Collisions=0/52=0%
-# Finished Make data base on Fri Jun 04 19:42:15 2021
+# Load=37/8192=0%, Rehash=0, Collisions=0/59=0%
+# Finished Make data base on Sat Jun 05 00:40:15 2021
 
  

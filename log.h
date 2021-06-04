@@ -11,10 +11,13 @@ typedef enum {
     WARNINGMSG = 2,
     ERRORMSG = 4,
     DEBUGMSG = 8,
-    LOGMSG = 16
+    LOGMSG = 16,
+    HELLOMSG = 32
 } LOGTYPE;
 
 extern int DD;
+
+extern int QUIET;
 
 extern FILE *logfile;
 

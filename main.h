@@ -4,6 +4,9 @@
 #include "net.h"
 #include "tools.h"
 #include "tree.h"
+#include "trie.h"
+#include "log.h"
+#include "link.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
