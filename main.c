@@ -16,12 +16,20 @@ void init_datastruct() {
   }
   IDMapQueueLeft = 0, IDMapQueueRight = 65535;
   cacheData = create_trie();
-
+  DNSHeader Header;
+  DNSQuestion Question;
+  Header.flags = htons(SetFlags(ntohs(Header.flags), QR, 1));
+  // if (RRlen == 0) Header.flags = htons(SetFlags(ntohs(Header.flags), RCODE,
+  // 3));
+  Header.qdcount = htons(1);
+  // Header.ancount = htons(0);
+  Question.qtype = htons(ARR);
+  Question.qclass = htons(1);
   char str[4097];
   str[4095] = 0;
   int line = 0;
   char sip[4097], name[4097];
-  char RRdata[4096];
+  char RRdata[4096], Ansdata[4096];
   unsigned ip;
   while (fgets(str, 4097, hosts)) {
     line++;
@@ -41,6 +49,7 @@ void init_datastruct() {
     char *servername = encodeName(name);
     int servernamelen = strlen(servername), RRlen = 0;
     if (ip != 0) {
+      Header.ancount = htons(1);
       DNSrr *RRa = malloc(sizeof(DNSrr));
       RRa->type = htons(ARR);
       RRa->dclass = htons(1);
@@ -56,11 +65,24 @@ void init_datastruct() {
       memcpy(RR, &ip, sizeof(int));
       RR += 4;
       RRlen = RR - RRdata;
+      RRlen = packData(&Header, &Question, RRdata, RRlen, servername, Ansdata,
+                       servernamelen);
       free(RRa);
+    } else {
+      Header.flags = htons(SetFlags(ntohs(Header.flags), RCODE, 3));
+      Header.ancount = 0;
+      Question.qtype = htons(AAAARR);
+      RRlen = packData(&Header, &Question, NULL, 0, servername, Ansdata,
+                       servernamelen);
+      insert_trie(cacheData, name, AAAARR, Ansdata, RRlen);
+      Question.qtype = htons(ARR);
+      RRlen = packData(&Header, &Question, NULL, 0, servername, Ansdata,
+                       servernamelen);
     }
-    insert_trie(cacheData, name, RRdata, RRlen);
+    insert_trie(cacheData, name, ARR, RRdata, RRlen);
   }
-  Map *lru = create_tree();
+  lru = create_tree();
+  timeout = create_tree();
 }
 
 #define hostsfilenamelen 200

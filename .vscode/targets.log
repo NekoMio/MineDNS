@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 03 23:22:51 2021
+# Make data base, printed on Fri Jun 04 19:42:15 2021
 
 # Variables
 
@@ -25,7 +25,7 @@ USERPROFILE = C:\Users\wildr
 # environment
 LOCALAPPDATA = C:\Users\wildr\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-9b081c7c-595d-4933-a25f-a7eb883982f4-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-45f5b3e2-2649-458c-ab74-1ec208b8eb4f-sock
 # environment
 VSCODE_CWD = C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -39,7 +39,7 @@ MAKE_COMMAND := E:/scoop/apps/gcc/current/bin/mingw32-make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_7180_WJHIUCJJKIYQJBFP
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8908_GYGLSJXKBPTWBTLJ
 # environment
 ONEDRIVECOMMERCIAL = C:\Users\wildr\OneDrive - bupt.edu.cn
 # environment
@@ -95,7 +95,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 7180
+VSCODE_PID = 8908
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -233,9 +233,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/minidns, mtime 1622733763): 29 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/minidns, mtime 1622806885): 25 files, no impossibilities.
 
-# 29 files, no impossibilities in 1 directories.
+# 25 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -246,7 +246,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-03 23:22:35
+#  Last modified 2021-06-04 19:41:51
 #  File has been updated.
 #  Successfully updated.
 
@@ -273,7 +273,7 @@ clean:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 8):
-	${RM} *.o dns *.log
+	${RM} *.o dns *.log dns.exe
 
 # Not a target:
 tree.o:
@@ -338,9 +338,9 @@ log.o:
 # strcache buffers: 1 (0) / strings = 35 / storage = 237 B / avg = 6 B
 # current buf: size = 8162 B / used = 237 B / count = 35 / avg = 6 B
 
-# strcache performance: lookups = 56 / hit rate = 37%
+# strcache performance: lookups = 52 / hit rate = 32%
 # hash-table stats:
-# Load=35/8192=0%, Rehash=0, Collisions=0/56=0%
-# Finished Make data base on Thu Jun 03 23:22:51 2021
+# Load=35/8192=0%, Rehash=0, Collisions=0/52=0%
+# Finished Make data base on Fri Jun 04 19:42:15 2021
 
  

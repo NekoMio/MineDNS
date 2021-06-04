@@ -56,8 +56,8 @@ unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
                       char *queryqname, char *Response, unsigned int qip,
                       unsigned short port);
 unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
-                      char *queryqname, char *Response, unsigned int qip,
-                      unsigned short port);
+                         char *queryqname, char *Response, unsigned int qip,
+                         unsigned short port);
 unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
                            char *queryname, char *Response, unsigned int qip,
                            unsigned short port);

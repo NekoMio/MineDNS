@@ -4,6 +4,7 @@
 #ifdef __linux__
 #include <sys/socket.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 #endif
 
 #ifdef WIN32
@@ -16,7 +17,15 @@ WSADATA wsaData;
 #include <time.h>
 #include "tools.h"
 
+#ifdef WIN32
 SOCKET Sock;
+#endif
+
+#ifdef __linux__
+int Sock;
+#endif
+
+
 struct sockaddr_in inAddr;
 struct sockaddr_in serverAddr;
 

@@ -1,9 +1,15 @@
 #include "tools.h"
-#include "trie.h"
+#include "tree.h"
 #include <string.h>
+#include "log.h"
+
+#include "trie.h"
 
 int DD = 0;
 FILE *logfile = NULL;
+int cachesize = 0, cachemax = 4096;
+Map *lru;
+Map *timeout;
 
 unsigned short unPackFlags(unsigned short flags, int type) {
   switch (type) {
@@ -78,9 +84,10 @@ char *encodeName(char *name) {
 }
 
 // split domain and question from query
-char *decodeQuestion(char *Query, DNSQuestion *queryquestion) {
+char *decodeQuestion(char *Query, DNSQuestion *queryquestion, int *len) {
   // decode doamain name
   char domain[512];
+  char *Begin = Query;
   for (int i = 0; i < 512; i++) {
     char c = *Query;
     Query++;
@@ -94,6 +101,7 @@ char *decodeQuestion(char *Query, DNSQuestion *queryquestion) {
     }
   }
   memcpy(queryquestion, Query, sizeof(DNSQuestion));
+  *len = (Query - Begin) + sizeof(DNSQuestion);
   return strdup(domain + 1);
 }
 
@@ -118,26 +126,87 @@ unsigned short packData(DNSHeader *Header, DNSQuestion *Question, char *RR,
   return Response - Begin;
 }
 
+int AddL(int *R) {
+  int ret = *R;
+  *R++;
+  if (*R == 65537) *R = 0;
+  return ret;
+}
+
 void push(int x) {
   IDMapQueue[IDMapQueueRight] = x;
   IDMapQueueRight++;
   if (IDMapQueueRight == 65537) IDMapQueueRight = 0;
 }
 int pop() {
-  if (IDMapQueueRight == IDMapQueueLeft) return - 1;
-  else return IDMapQueue[IDMapQueueLeft++];
+  if (IDMapQueueRight == IDMapQueueLeft)
+    return -1;
+  else
+    return IDMapQueue[AddL(&IDMapQueueLeft)];
 }
-unsigned char findInStatic(char *name, char **RR, int *len) {
+
+void checkttltimeout() {
+  time_t now = time(NULL);
+  Node *rt = search_min(timeout);
+  while (rt && rt->key < now) {
+    LOG(DEBUGMSG, "%s type:%d TTL timeout delete from cache\n", rt->value, rt->type);
+    delete_trie(cacheData, rt->value, rt->type);
+    deletenode(timeout, rt);
+    rt = search_min(timeout);
+  }
+}
+
+void updatelru(char *name, unsigned short type) {
+
+}
+
+void lruDelete() {
+
+}
+
+void addttltimeout(char *name, unsigned short type, time_t ttl) {
+  insert_tree(timeout, ttl + time(NULL), name, type);
+}
+
+unsigned char searchinCache(char *name, unsigned short type, char **RR,
+                            int *len) {
   // int len = 0;
-  *RR = search_trie(cacheData, name, len);
-  if (*len == -1) return 0;
-  else return 1;
+  checkttltimeout();
+  updatelru(name, type);
+  *RR = search_trie(cacheData, type, name, len);
+  if (*len == -1)
+    return 0;
+  else
+    return 1;
   // return 0;
+}
+
+void addtoCache(char *name, unsigned short type, time_t ttl, char *RR, int *len) {
+  LOG(DEBUGMSG, "%s type:%d Add to Cache\n", name, type);
+  if (cachesize == cachemax) {
+    lruDelete();
+  }
+  addttltimeout(name, type, ttl);
+  updatelru(name, type);
+  insert_trie(cacheData, name, type, RR, *len);
+}
+
+unsigned int unpackforttl(char *Query, unsigned short num) {
+  unsigned int minval = ~0;
+  DNSrr TMP;
+  for (int i = 0; i < num; i++) {
+    Query += 2;
+    memcpy(&TMP, Query, sizeof (TMP));
+    minval = min(minval, ntohl(TMP.ttl));
+    Query += ntohs(TMP.rdlengtn);
+  }
+  return minval;
 }
 
 unsigned char Used[65536];
 
-unsigned short createMap(unsigned short x, unsigned int ip, unsigned short port) {
+unsigned short createMap(unsigned short x, unsigned int ip,
+                         unsigned short port) {
   unsigned short id = pop();
   Used[id] = 1;
   IDMapData[id] = (IDMap){ip, x, port};

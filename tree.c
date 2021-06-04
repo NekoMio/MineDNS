@@ -1,5 +1,4 @@
 #include "tree.h"
-
 #include <stdlib.h>
 
 RBRoot *create_tree() {
@@ -107,7 +106,7 @@ void insert_fixup(RBRoot *root, Node *node) {
           uncle->color = BLACK;
           parent->color = BLACK;
           gparent->color = RED;
-          node = parent;
+          node = gparent;
           continue;
         }
       }
@@ -149,18 +148,19 @@ void insertnode(RBRoot *root, Node *node) {
   } else {
     root->node = node;
   }
-  root->node = RED;
+  node->color = RED;
 
   insert_fixup(root, node);
 }
 
-Node *NewNode(Type key, char *value, Node *parent, Node *left, Node *right) {
+Node *NewNode(Type key, char *value, unsigned short type, Node *parent, Node *left, Node *right) {
   Node *p;
   if ((p = malloc(sizeof(Node))) == NULL) {
     return NULL;
   }
   p->key = key;
   p->value = strdup(value);
+  p->type = type;
   p->left = left;
   p->right = right;
   p->parent = parent;
@@ -169,12 +169,12 @@ Node *NewNode(Type key, char *value, Node *parent, Node *left, Node *right) {
   return p;
 }
 
-Node *insert_tree(RBRoot *root, Type key, char* value) {
+Node *insert_tree(RBRoot *root, Type key, char* value, unsigned short type) {
   Node *node;
-  if ((node = search(root->node, key)) != NULL) {
-    return node;
-  }
-  if ((node = NewNode(key, value, NULL, NULL, NULL)) == NULL) return NULL;
+  // if ((node = search(root->node, key)) != NULL) {
+  //   return node;
+  // }
+  if ((node = NewNode(key, value, type, NULL, NULL, NULL)) == NULL) return NULL;
 
   insertnode(root, node);
 
@@ -209,7 +209,7 @@ void delete_fixup(RBRoot *root, Node *node, Node *parent) {
           other->right->color = BLACK;
           left_rotate(root, parent);
           node = root->node;
-          // break;
+          break;
         }
       }
     } else {
@@ -236,7 +236,7 @@ void delete_fixup(RBRoot *root, Node *node, Node *parent) {
           other->left->color = BLACK;
           right_rotate(root, parent);
           node = root->node;
-          // break;
+          break;
         }
       }
     }
@@ -338,4 +338,14 @@ void free_tree(RBRoot *root) {
   }
 
   free(root);
+}
+
+Node *searchminnode(Node *rt) {
+  if (rt->left != NULL) return searchminnode(rt->left);
+  else return rt;
+}
+
+Node *search_min(RBRoot *root) {
+  if (root->node == NULL) return NULL;
+  return searchminnode(root->node);
 }

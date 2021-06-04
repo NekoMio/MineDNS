@@ -1,55 +1,62 @@
 #include "dns.h"
+
 #include "net.h"
 #include "tools.h"
 
-unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
-                      char *queryqname, char *Response, unsigned int qip,
-                      unsigned short port) {
-  int RRlen = 0;
-  char *RR;
-  if (findInStatic(queryqname, &RR, &RRlen)) {
-    char *servername = encodeName(queryqname);
-    int servernamelen = strlen(servername);
-    Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
-    if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags), RCODE, 3));
-    Header->qdcount = htons(1);
-    Header->ancount = htons(RRlen == 0 ? 0 : 1);
-    unsigned short len = packData(Header, Question, RR, RRlen, servername,
-                                  Response, servernamelen);
-    free(servername);
-    sendMessage(Response, len, qip, port);
-    return 0;
-  }
-  return solveRemote(Header, Question, queryqname, Response, qip, port);
-}
+// unsigned short solveA(DNSHeader *Header, DNSQuestion *Question,
+//                       char *queryqname, char *Response, unsigned int qip,
+//                       unsigned short port) {
+//   int RRlen = 0;
+//   char *RR;
+//   if (findInStatic(queryqname, &RR, &RRlen)) {
+//     char *servername = encodeName(queryqname);
+//     int servernamelen = strlen(servername);
+//     Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
+//     if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags),
+//     RCODE, 3)); Header->qdcount = htons(1); Header->ancount = htons(RRlen ==
+//     0 ? 0 : 1); unsigned short len = packData(Header, Question, RR, RRlen,
+//     servername,
+//                                   Response, servernamelen);
+//     free(servername);
+//     sendMessage(Response, len, qip, port);
+//     return 0;
+//   }
+//   return solveRemote(Header, Question, queryqname, Response, qip, port);
+// }
 
-unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
-                      char *queryqname, char *Response, unsigned int qip,
-                      unsigned short port) {
-  int RRlen = 0;
-  char *RR;
-  if (findInStatic(queryqname, &RR, &RRlen) && RRlen == 0) {
-    char *servername = encodeName(queryqname);
-    int servernamelen = strlen(servername);
-    Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
-    if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags), RCODE, 3));
-    Header->qdcount = htons(1);
-    Header->ancount = htons(0);
-    unsigned short len = packData(Header, Question, RR, RRlen, servername,
-                                  Response, servernamelen);
-    free(servername);
-    sendMessage(Response, len, qip, port);
-    return 0;
-  }
-  return solveRemote(Header, Question, queryqname, Response, qip, port);
-}
+// unsigned short solveAAAA(DNSHeader *Header, DNSQuestion *Question,
+//                       char *queryqname, char *Response, unsigned int qip,
+//                       unsigned short port) {
+//   int RRlen = 0;
+//   char *RR;
+//   if (findInStatic(queryqname, &RR, &RRlen) && RRlen == 0) {
+//     char *servername = encodeName(queryqname);
+//     int servernamelen = strlen(servername);
+//     Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
+//     if (RRlen == 0) Header->flags = htons(SetFlags(ntohs(Header->flags),
+//     RCODE, 3)); Header->qdcount = htons(1); Header->ancount = htons(0);
+//     unsigned short len = packData(Header, Question, RR, RRlen, servername,
+//                                   Response, servernamelen);
+//     free(servername);
+//     sendMessage(Response, len, qip, port);
+//     return 0;
+//   }
+//   return solveRemote(Header, Question, queryqname, Response, qip, port);
+// }
 
 unsigned short solveRemote(DNSHeader *Header, DNSQuestion *Question,
                            char *queryname, char *Response, unsigned int qip,
                            unsigned short port) {
   char *servername = encodeName(queryname);
   int servernamelen = strlen(servername);
-  // cache();
+  char *RR;
+  int RRlen;
+  if (searchinCache(queryname, ntohs(Question->qtype), &RR, &RRlen)) {
+    memcpy(RR, &Header->ID, 2);
+    sendMessage(RR, RRlen, qip, port);
+    // Header->flags = htons(SetFlags(ntohs(Header->flags), QR, 1));
+    // Header->qdcount = htons(1);
+  }
   Header->ID = createMap(Header->ID, qip, port);
   queryForRemote(Header, Question, servername, servernamelen, Response);
   // decodeHeader(Response, Header);
@@ -77,17 +84,19 @@ unsigned short getResforReq(char *Query, char *Response, unsigned int qip,
 
   decodeHeader(Query, &queryheader);
 
-  char *queryqname = decodeQuestion(Query + sizeof(queryheader), &queryquestion);
-  
+  int querylen = 0, RRlen = 0;
+  char *queryqname =
+      decodeQuestion(Query + sizeof(queryheader), &queryquestion, &querylen);
+  char RR[4096];
   if (unPackFlags(queryheader.flags, QR) == 0) {
     if (unPackFlags(queryheader.flags, OPCODE) == 0) {
       switch (ntohs(queryquestion.qtype)) {
         case ARR:
-          solveA(&queryheader, &queryquestion, queryqname, Response, qip, port);
-          break;
+          // solveA(&queryheader, &queryquestion, queryqname, Response, qip,
+          // port); break;
         case AAAARR:
-          solveAAAA(&queryheader, &queryquestion, queryqname, Response, qip, port);
-          break;
+          // solveAAAA(&queryheader, &queryquestion, queryqname, Response, qip,
+          // port); break;
         case CNAMERR:
           // solveCNAME(queryqname, Response);
           // break;
@@ -112,8 +121,10 @@ unsigned short getResforReq(char *Query, char *Response, unsigned int qip,
     } else {
       queryheader.ID = tmpid;
     }
+    unsigned int ttl = unpackforttl(Query + sizeof(queryheader) + querylen, ntohs(queryheader.qdcount));
     memcpy(Query, &queryheader, sizeof(queryheader));
     sendMessage(Query, len, ip, port);
+    if (ttl != ~0 && !searchinCache(queryqname, ntohs(queryquestion.qtype), (char **)&RR, &RRlen)) addtoCache(queryqname, ntohs(queryquestion.qtype), ttl, Query, &len);
   }
   free(queryqname);
   // free(queryheader);

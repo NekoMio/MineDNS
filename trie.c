@@ -22,7 +22,8 @@ TNode *NewTrieNode() {
 
 TrieRoot *create_trie() {
   TrieRoot *rt = malloc(sizeof(TrieRoot));
-  rt->node = NewTrieNode();
+  for (int i = 0; i < 34; i++) rt->node[i] = NULL;
+  // rt->node = NewTrieNode();
   return rt;
 }
 
@@ -36,11 +37,21 @@ void freeTrienode(TNode *rt) {
   free(rt);
 }
 
-void free_trie(TrieRoot *root) { freeTrienode(root->node); }
+void free_trie(TrieRoot *root) {
+  for (int i = 0; i <= 33; i++) {
+    if (root->node[i])
+      freeTrienode(root->node[i]);
+  }
+}
 
-TNode *insert_trie(TrieRoot *root, char *key, char *data, int len) {
+TNode *insert_trie(TrieRoot *root, char *key, unsigned short type, char *data,
+                   int len) {
   int keylen = strlen(key);
-  TNode *rt = root->node;
+  if (type > 33) return NULL;
+  if (root->node[type] == NULL) {
+    root->node[type] = NewTrieNode();
+  }
+  TNode *rt = root->node[type];
   rt->size++;
   for (int i = 0; i < keylen; i++) {
     if (!rt->ch[trans(key[i])]) {
@@ -55,9 +66,13 @@ TNode *insert_trie(TrieRoot *root, char *key, char *data, int len) {
   memcpy(rt->data, data, len);
 }
 
-char *search_trie(TrieRoot *root, char *key, int *len) {
+char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len) {
   int keylen = strlen(key);
-  TNode *rt = root->node;
+  if (type > 33 || root->node[type] == NULL) {
+    *len = -1;
+    return NULL;
+  }
+  TNode *rt = root->node[type];
   for (int i = 0; i < keylen; i++) {
     if (!rt->ch[trans(key[i])]) {
       *len = -1;
@@ -75,16 +90,17 @@ char *search_trie(TrieRoot *root, char *key, int *len) {
   }
 }
 
-void delete_trie(TrieRoot *root, char *key) {
+void delete_trie(TrieRoot *root, char *key, unsigned short type) {
   int keylen = strlen(key);
-  TNode *rt = root->node;
+  if (root->node[type] == NULL) return;
+  TNode *rt = root->node[type];
   TNode *delRT = NULL;
   for (int i = 0; i < keylen; i++) {
     if (!rt->ch[trans(key[i])]) {
       return;
     }
     rt->size--;
-    if (rt->size == 0 && rt != root->node) {
+    if (rt->size == 0) {
       delRT = rt;
     }
   }
