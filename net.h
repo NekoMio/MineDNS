@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <sys/types.h>
+#include <errno.h>
 #endif
 
 #ifdef WIN32
@@ -23,6 +25,7 @@ SOCKET Sock;
 
 #ifdef __linux__
 int Sock;
+typedef struct sockaddr SOCKADDR;
 #endif
 
 

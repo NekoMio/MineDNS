@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun 05 00:40:15 2021
+# Make data base, printed on Sat Jun 05 01:50:39 2021
 
 # Variables
 
@@ -25,7 +25,7 @@ USERPROFILE = C:\Users\wildr
 # environment
 LOCALAPPDATA = C:\Users\wildr\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-45f5b3e2-2649-458c-ab74-1ec208b8eb4f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-c6206644-7892-4abe-a418-e32779a90e86-sock
 # environment
 VSCODE_CWD = C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -39,7 +39,7 @@ MAKE_COMMAND := E:/scoop/apps/gcc/current/bin/mingw32-make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8908_GYGLSJXKBPTWBTLJ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_18080_BVTRERKSBFPBCNLY
 # environment
 ONEDRIVECOMMERCIAL = C:\Users\wildr\OneDrive - bupt.edu.cn
 # environment
@@ -71,7 +71,7 @@ ONEDRIVE = C:\Users\wildr\OneDrive - bupt.edu.cn
 # environment
 POWERSHELL_DISTRIBUTION_CHANNEL = MSI:Windows 10 Pro
 # makefile
-CURDIR := c:/Users/wildr/Desktop/minidns
+CURDIR := c:/Users/wildr/Desktop/MineDNS
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -95,7 +95,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 8908
+VSCODE_PID = 18080
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -189,7 +189,7 @@ VSCODE_NODE_CACHED_DATA_DIR = C:\Users\wildr\AppData\Roaming\Code\CachedData\054
 # environment
 APPDATA = C:\Users\wildr\AppData\Roaming
 # makefile (from 'Makefile', line 2)
-CFLAGS = -g
+CFLAGS = 
 # environment
 HOMEDRIVE = C:
 # environment
@@ -233,9 +233,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/minidns, mtime 1622824755): 30 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/MineDNS, mtime 1622829028): 32 files, no impossibilities.
 
-# 30 files, no impossibilities in 1 directories.
+# 32 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -252,7 +252,7 @@ link.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-05 00:39:48
+#  Last modified 2021-06-05 01:50:16
 #  File has been updated.
 #  Successfully updated.
 
@@ -306,12 +306,12 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
-run: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
+run:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 11):
-	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32
 	dns.exe
 
 dns: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
@@ -319,7 +319,7 @@ dns: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 5):
-	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32 -g
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32
 
 # Not a target:
 main.o:
@@ -333,20 +333,27 @@ log.o:
 #  Modification time never checked.
 #  File has not been updated.
 
+linux: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm
+
 # files hash-table stats:
-# Load=15/1024=1%, Rehash=0, Collisions=0/41=0%
+# Load=16/1024=2%, Rehash=0, Collisions=0/42=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 37 / storage = 250 B / avg = 6 B
-# current buf: size = 8162 B / used = 250 B / count = 37 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 38 / storage = 256 B / avg = 6 B
+# current buf: size = 8162 B / used = 256 B / count = 38 / avg = 6 B
 
-# strcache performance: lookups = 59 / hit rate = 37%
+# strcache performance: lookups = 63 / hit rate = 39%
 # hash-table stats:
-# Load=37/8192=0%, Rehash=0, Collisions=0/59=0%
-# Finished Make data base on Sat Jun 05 00:40:15 2021
+# Load=38/8192=0%, Rehash=0, Collisions=0/63=0%
+# Finished Make data base on Sat Jun 05 01:50:39 2021
 
  

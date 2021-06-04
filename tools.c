@@ -9,7 +9,7 @@
 int DD = 0, QUIET;
 FILE *logfile = NULL;
 int cachesize = 0, cachemax = 4096;
-link *lru;
+LINK *lru;
 Map *timeout;
 
 unsigned short unPackFlags(unsigned short flags, int type) {
@@ -173,6 +173,12 @@ void addtoCache(char *name, unsigned short type, time_t ttl, char *RR,
   // cachesize++;
   insert_trie(cacheData, name, type, RR, *len, time(NULL), addttltimeout(name, type, ttl));
 }
+
+#ifdef __linux__
+unsigned int min(unsigned int a, unsigned int b) {
+  return a > b ? a : b;
+}
+#endif
 
 unsigned int unpackforttl(char *Query, unsigned short num) {
   unsigned int minval = ~0;

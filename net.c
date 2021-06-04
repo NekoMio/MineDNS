@@ -48,7 +48,7 @@ char *recvMessage(unsigned int *ip, int *len, unsigned short *port) {
     // LOG(LOGMSG, "%d-%02d-%02d %02d:%02d:%02d Recv %15s:%-5d\n", (1900 +
     // p->tm_year), (1 + p->tm_mon), p->tm_mday, p->tm_hour, p->tm_min,
     // p->tm_sec, inet_ntoa(inAddr.sin_addr), ntohs(inAddr.sin_port));
-    *ip = inAddr.sin_addr.S_un.S_addr;
+    *ip = inAddr.sin_addr.s_addr;
     *port = ntohs(inAddr.sin_port);
     char *ret = malloc(4096);
     memcpy(ret, buf, *len);

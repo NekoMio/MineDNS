@@ -3,15 +3,15 @@
 #include "stdlib.h"
 #include "log.h"
 
-link *create_link() {
-    link *ls = malloc(sizeof(link));
+LINK *create_link() {
+    LINK *ls = malloc(sizeof(LINK));
     ls->head = NULL;
     ls->tail = NULL;
     ls->length = 0;
     return ls;
 }
 
-int move_front(link *Link, linknode *x) {
+int move_front(LINK *Link, linknode *x) {
     if (Link->head == x) return 0;
     if (x->pre) {
         x->pre->nxt = x->nxt;
@@ -27,7 +27,7 @@ int move_front(link *Link, linknode *x) {
     Link->head = x;
 }
 
-linknode *add_front(link *Link, char *key, unsigned short type, Node *rt) {
+linknode *add_front(LINK *Link, char *key, unsigned short type, Node *rt) {
     linknode *x = malloc(sizeof(linknode));
     x->key = strdup(key);
     x->type = type;
@@ -41,7 +41,7 @@ linknode *add_front(link *Link, char *key, unsigned short type, Node *rt) {
     Link->length++;
     return x;
 }
-int link_delnode(link* Link, linknode* node) {
+int link_delnode(LINK* Link, linknode* node) {
     if (node == NULL) return 0;
     if (node->pre) {
         node->pre->nxt = node->nxt;
@@ -62,7 +62,7 @@ int link_delnode(link* Link, linknode* node) {
     Link->length--;
     return 1;
 }
-int link_popback(link* Link) {
+int link_popback(LINK* Link) {
     if (Link->tail == NULL) return 0;
     LOG(DEBUGMSG, "lru: Delete Cache %s: %d\n", Link->tail->key, Link->tail->type);
     delete_trie(cacheData, Link->tail->key, Link->tail->type);

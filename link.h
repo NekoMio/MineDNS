@@ -13,14 +13,14 @@ typedef struct _linknode {
 typedef struct _link {
 	linknode *head, *tail;
 	int length;
-} link;
+} LINK;
 
-link* create_link();
-int move_front(link *Link, linknode *x);
-linknode* add_front(link *Link, char *key, unsigned short type, Node *rt);
-int link_delnode(link* Link, linknode* node);
-int link_popback(link* Link);
+LINK* create_link();
+int move_front(LINK *Link, linknode *x);
+linknode* add_front(LINK *Link, char *key, unsigned short type, Node *rt);
+int link_delnode(LINK* Link, linknode* node);
+int link_popback(LINK* Link);
 
-extern link *lru;
+extern LINK *lru;
 
 #endif
