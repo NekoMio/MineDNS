@@ -4,3 +4,5 @@ SimpleDNS
 *.o
 *.exe
 dns
+*.log
+**/*.log

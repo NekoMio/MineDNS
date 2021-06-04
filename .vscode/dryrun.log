@@ -1,5 +1,5 @@
 make.exe --dry-run --keep-going --print-directory
 mingw32-make: Entering directory 'c:/Users/wildr/Desktop/MineDNS'
-mingw32-make: 'dns' is up to date.
+gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32
 mingw32-make: Leaving directory 'c:/Users/wildr/Desktop/MineDNS'
  

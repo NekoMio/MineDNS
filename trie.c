@@ -68,6 +68,7 @@ TNode *insert_trie(TrieRoot *root, char *key, unsigned short type, char *data,
   cachesize++;
   memcpy(rt->data, data, len);
   if (nrt != NULL) rt->lkn = add_front(lru, key, type, nrt);
+  else rt->lkn = NULL;
 }
 
 char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len, time_t *ttl) {
@@ -89,7 +90,7 @@ char *search_trie(TrieRoot *root, unsigned short type, char *key, int *len, time
     *len = rt->len;
     *ttl = rt->ttl;
     if (*len == 0) return NULL;
-    move_front(lru, rt->lkn);
+    if (rt->lkn) move_front(lru, rt->lkn);
     return rt->data;
   } else {
     *ttl = 0;

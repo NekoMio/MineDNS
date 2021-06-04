@@ -10,11 +10,14 @@ void init_datastruct() {
   cacheData = create_trie();
   DNSHeader Header;
   DNSQuestion Question;
+  Header.flags = 0;
   Header.flags = htons(SetFlags(ntohs(Header.flags), QR, 1));
   // if (RRlen == 0) Header.flags = htons(SetFlags(ntohs(Header.flags), RCODE,
   // 3));
   Header.qdcount = htons(1);
-  // Header.ancount = htons(0);
+  Header.ancount = htons(0);
+  Header.arcount = 0;
+  Header.nscount = 0;
   Question.qtype = htons(ARR);
   Question.qclass = htons(1);
   char str[4097];
@@ -42,11 +45,14 @@ void init_datastruct() {
     int servernamelen = strlen(servername), RRlen = 0;
     if (ip != 0) {
       Header.ancount = htons(1);
+      Header.flags = htons(SetFlags(ntohs(Header.flags), RCODE, 0));
       DNSrr *RRa = malloc(sizeof(DNSrr));
       RRa->type = htons(ARR);
       RRa->dclass = htons(1);
       RRa->ttl = htons(120);
       RRa->rdlengtn = htons(4);
+      Question.qtype = htons(ARR);
+      Question.qclass = htons(1);
       unsigned short tmp = 0x0cc0;
       memcpy(RR, &tmp, 2);
       // memcpy(RR, servername, servernamelen + 1);
@@ -64,6 +70,7 @@ void init_datastruct() {
       Header.flags = htons(SetFlags(ntohs(Header.flags), RCODE, 3));
       Header.ancount = 0;
       Question.qtype = htons(AAAARR);
+      Question.qclass = htons(1);
       RRlen = packData(&Header, &Question, NULL, 0, servername, Ansdata,
                        servernamelen);
       insert_trie(cacheData, name, AAAARR, Ansdata, RRlen, -1, NULL);
@@ -71,7 +78,7 @@ void init_datastruct() {
       RRlen = packData(&Header, &Question, NULL, 0, servername, Ansdata,
                        servernamelen);
     }
-    insert_trie(cacheData, name, ARR, RRdata, RRlen, -1, NULL);
+    insert_trie(cacheData, name, ARR, Ansdata, RRlen, -1, NULL);
   }
   lru = create_link();
   timeout = create_tree();
