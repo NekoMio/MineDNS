@@ -1,5 +1,13 @@
-make.exe --dry-run --keep-going --print-directory
+make.exe --dry-run --always-make --keep-going --print-directory
 mingw32-make: Entering directory 'c:/Users/wildr/Desktop/MineDNS'
+gcc    -c -o main.o main.c
+gcc    -c -o dns.o dns.c
+gcc    -c -o tree.o tree.c
+gcc    -c -o net.o net.c
+gcc    -c -o tools.o tools.c
+gcc    -c -o trie.o trie.c
+gcc    -c -o log.o log.c
+gcc    -c -o link.o link.c
 gcc main.o net.o dns.o tools.o tree.o trie.o log.o link.o -o dns -lm -lws2_32
 mingw32-make: Leaving directory 'c:/Users/wildr/Desktop/MineDNS'
  

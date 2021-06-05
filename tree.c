@@ -100,6 +100,8 @@ void delete_treenode(RBRoot *root, Node *rt) {
         rt->ch[1]->fa = NULL;
       }
     }
+    free(rt->value);
+    free(rt);
     return;
   } else {
     Node *twp = findtoswap(rt->ch[1]);

@@ -184,6 +184,12 @@ int main(int argc, char const *argv[]) {
     // sendMessage(Response, len, );
     free(Query);
   }
+  #ifdef WIN32
+  closesocket(Sock);
+  #endif
+  #ifdef __linux__
+  close(Sock);
+  #endif
   free(Response);
   return 0;
 }

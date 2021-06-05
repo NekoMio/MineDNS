@@ -8,7 +8,7 @@ mingw32-make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun 05 02:12:08 2021
+# Make data base, printed on Sat Jun 05 09:19:48 2021
 
 # Variables
 
@@ -25,7 +25,7 @@ USERPROFILE = C:\Users\wildr
 # environment
 LOCALAPPDATA = C:\Users\wildr\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-dc6e788c-a3bf-4117-8d94-88ec942add9f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-68905bc5-b487-46f5-8059-294552c35a1b-sock
 # environment
 VSCODE_CWD = C:\Users\wildr\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -39,7 +39,7 @@ MAKE_COMMAND := E:/scoop/apps/gcc/current/bin/mingw32-make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19192_ICCEANJHTINXPQDL
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17596_FPOPGYGXMQLSGCDF
 # environment
 ONEDRIVECOMMERCIAL = C:\Users\wildr\OneDrive - bupt.edu.cn
 # environment
@@ -95,7 +95,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 19192
+VSCODE_PID = 17596
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -189,7 +189,7 @@ VSCODE_NODE_CACHED_DATA_DIR = C:\Users\wildr\AppData\Roaming\Code\CachedData\054
 # environment
 APPDATA = C:\Users\wildr\AppData\Roaming
 # makefile (from 'Makefile', line 2)
-CFLAGS = -g
+CFLAGS = 
 # environment
 HOMEDRIVE = C:
 # environment
@@ -233,7 +233,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/wildr/Desktop/MineDNS, mtime 1622830291): 32 files, no impossibilities.
+# . (key c:/Users/wildr/Desktop/MineDNS, mtime 1622854650): 32 files, no impossibilities.
 
 # 32 files, no impossibilities in 1 directories.
 
@@ -252,7 +252,7 @@ link.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-05 02:11:16
+#  Last modified 2021-06-05 02:30:16
 #  File has been updated.
 #  Successfully updated.
 
@@ -354,6 +354,6 @@ linux: main.o dns.o tree.o net.o tools.o trie.o log.o link.o
 # strcache performance: lookups = 71 / hit rate = 45%
 # hash-table stats:
 # Load=39/8192=0%, Rehash=0, Collisions=0/71=0%
-# Finished Make data base on Sat Jun 05 02:12:08 2021
+# Finished Make data base on Sat Jun 05 09:19:48 2021
 
  

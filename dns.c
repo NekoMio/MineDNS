@@ -88,6 +88,7 @@ unsigned short queryForRemote(DNSHeader *Header, DNSQuestion *Question,
       packData(Header, Question, NULL, 0, servername, Query, servernamelen);
   // LOG(8, "%s\n", PUBLIC_DNS_IP);
   sendMessage(Query, len, inet_addr(PUBLIC_DNS_IP), 53);
+  free(Query);
   return 0;
 }
 
